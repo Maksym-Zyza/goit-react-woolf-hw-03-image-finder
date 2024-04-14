@@ -72,7 +72,6 @@ class App extends React.Component {
     const { src, alt } = this.state.largeImg;
     const renderBtn = images.length > 0 && !isLoading;
     const nothing = images.length === 0;
-    console.log(images);
 
     return (
       <div>
