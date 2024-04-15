@@ -7,7 +7,7 @@ class ImageGallery extends React.Component {
     images: PropTypes.arrayOf(
       PropTypes.shape({
         id: PropTypes.number.isRequired,
-      }),
+      })
     ).isRequired,
   };
 
@@ -15,13 +15,14 @@ class ImageGallery extends React.Component {
     const { images, onClick } = this.props;
 
     return (
-      <ul onClick={onClick} className="ImageGallery">
+      <ul className="ImageGallery">
         {images.map(({ id, webformatURL, largeImageURL, tags }) => (
           <ImageGalleryItem
             key={id}
             webformatURL={webformatURL}
             largeImageURL={largeImageURL}
             tags={tags}
+            onClick={onClick}
           />
         ))}
       </ul>

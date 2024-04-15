@@ -15,7 +15,7 @@ class ImageGalleryItem extends React.Component {
   };
 
   render() {
-    const { webformatURL, tags, largeImageURL } = this.props;
+    const { webformatURL, tags, largeImageURL, onClick } = this.props;
 
     return (
       <li className="ImageGalleryItem">
@@ -24,6 +24,7 @@ class ImageGalleryItem extends React.Component {
           src={webformatURL}
           alt={tags}
           data-img={largeImageURL}
+          onClick={() => onClick(webformatURL, tags)}
         />
       </li>
     );

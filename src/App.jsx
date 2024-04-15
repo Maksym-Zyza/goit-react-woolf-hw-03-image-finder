@@ -17,14 +17,14 @@ class App extends React.Component {
     error: null,
     showModal: false,
     largeImg: { src: '', alt: '' },
+    renderBtn: false,
   };
 
-  componentDidMount() {
-    this.fetchImages();
-  }
-
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.searchQuery !== this.state.searchQuery) {
+    if (
+      prevState.searchQuery !== this.state.searchQuery ||
+      prevState.page !== this.state.page
+    ) {
       this.fetchImages();
     }
   }
@@ -40,24 +40,22 @@ class App extends React.Component {
     this.setState({ isLoading: true });
 
     getImg(options)
-      .then(hits => {
+      .then(({ hits, totalHits }) => {
         this.setState(prevState => ({
           images: [...prevState.images, ...hits],
-          page: prevState.page + 1,
+          renderBtn: this.state.page < Math.ceil(totalHits / 12),
         }));
       })
       .catch(error => this.setState({ error }))
       .finally(() => this.setState({ isLoading: false }));
   };
 
-  onImgClick = e => {
-    const src = e.target.dataset.img;
-    const alt = e.target.alt;
+  changePage = () => {
+    this.setState(prevState => ({ page: prevState.page + 1 }));
+  };
 
-    if (e.target.nodeName === 'IMG') {
-      this.setState({ largeImg: { src, alt } });
-    }
-
+  onImgClick = (src, alt) => {
+    this.setState({ largeImg: { src, alt } });
     this.toggleModal();
   };
 
@@ -68,9 +66,8 @@ class App extends React.Component {
   };
 
   render() {
-    const { images, isLoading, showModal, error } = this.state;
+    const { images, isLoading, showModal, error, renderBtn } = this.state;
     const { src, alt } = this.state.largeImg;
-    const renderBtn = images.length > 0 && !isLoading;
     const nothing = images.length === 0;
 
     return (
@@ -81,7 +78,7 @@ class App extends React.Component {
 
         {isLoading && <Loader isLoading={isLoading} />}
 
-        {renderBtn && <Button onClick={this.fetchImages} scroll={scrollTo()} />}
+        {renderBtn && <Button onClick={this.changePage} scroll={scrollTo()} />}
 
         {showModal && <Modal src={src} alt={alt} onClose={this.toggleModal} />}
 

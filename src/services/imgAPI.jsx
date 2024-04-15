@@ -15,7 +15,7 @@ axios.defaults.params = {
 const getImg = async ({ q = '', page = 1 }) => {
   try {
     const { data } = await axios.get('', { params: { q, page } });
-    return data.hits;
+    return data;
   } catch (error) {
     alert(error);
     return [];
